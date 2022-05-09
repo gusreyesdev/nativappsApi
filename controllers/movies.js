@@ -7,7 +7,7 @@ const getApiMovies = async () => {
 
     try {
 
-        const response = await axios.get(process.env.URL_API + '?i=tt3896198&apikey=5eec5adc&s=Love');
+        const response = await axios.get(process.env.URL_API + '?i=tt3896198&apikey=5eec5adc&s=Love&y=2020');
 
         const dataResponse = response.data;
 
