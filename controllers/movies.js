@@ -3,51 +3,37 @@ const axios = require('axios').default;
 const Movie = require('../models/Movie');
 
 
-const getApiMovies = async () => {
-
-    try {
-
-        const response = await axios.get(process.env.URL_API + '?i=tt3896198&apikey=5eec5adc&s=Love&y=2020');
-
-        const dataResponse = response.data;
-
-        let movies = [];
-
-        for (const key in dataResponse) {
-
-            const response = dataResponse[key];
-
-            for (const dataArray of response) {
-
-                if (dataArray.Title !== undefined) {
-
-                    movies.push(dataArray);
-
-                }
-            }
-        }
-
-        return movies;
-
-    } catch (error) {
-
-        console.log("error api movies", error);
-    }
-
-}
-
-
 const saveMovies = async (req, res = response) => {
 
-    const movies = await getApiMovies();
-
     try {
 
-        for (const moviesArray of movies) {
+        for (let i = 1; i <= 90; i++) {
 
-            let movie = new Movie(moviesArray);
+            const response = await axios.get(process.env.URL_API + '?i=tt3896198&apikey=5eec5adc&s=Love&y=2020&page=' + i);
 
-            const movieSaved = await movie.save();
+            const dataResponse = await response.data;
+
+            let movies = [];
+
+            for (const key in dataResponse) {
+
+                const response = await dataResponse[key];
+
+                for (const dataArray of response) {
+
+                    if (dataArray.Title !== undefined) {
+
+                        const responseObj = await dataArray;
+
+                        let movie = new Movie(responseObj);
+
+                        const movieSaved = await movie.save();
+
+                    }
+
+                }
+
+            }
 
         }
 
@@ -58,15 +44,15 @@ const saveMovies = async (req, res = response) => {
 
     } catch (error) {
 
-        console.log("errror save ", error);
+        console.log("error api movies", error);
 
         res.status(500).json({
             ok: false,
             msg: 'Por favor hable con el administrador'
         });
     }
-};
 
+}
 
 
 const getMovies = async (req, res = response) => {
@@ -74,6 +60,8 @@ const getMovies = async (req, res = response) => {
     try {
 
         const movies = await Movie.find();
+
+        console.log("movies ", movies)
 
         res.status(200).json({
             ok: true,
@@ -91,7 +79,6 @@ const getMovies = async (req, res = response) => {
 
 
 module.exports = {
-    getMovies,
     saveMovies,
-    getApiMovies
+    getMovies
 }

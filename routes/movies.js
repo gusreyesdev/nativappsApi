@@ -5,18 +5,13 @@
 
 const express = require('express');
 
-const { saveMovies, getMovies, getApiMovies } = require('../controllers/movies');
-
+const { saveMovies, getMovies } = require('../controllers/movies');
 
 const router = express.Router();
 
 router.post('/saveMovies', saveMovies);
 
 router.get('/getMovies', getMovies);
-
-router.get('/getMovies', getMovies);
-
-router.get('/getApiMovies', getApiMovies);
 
 
 
